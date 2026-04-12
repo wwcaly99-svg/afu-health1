@@ -1,0 +1,84 @@
+.input-bar {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.input-bar-row {
+  display: flex;
+  align-items: center;
+}
+
+.input-bar-field-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f4f3fb;
+  border-radius: 22px;
+  padding: 4px 6px;
+  border: 1px solid rgba(108, 92, 231, 0.1);
+  transition: border-color 0.2s;
+}
+
+.input-bar-field-wrap:focus-within {
+  border-color: rgba(108, 92, 231, 0.3);
+}
+
+.input-bar-field {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  outline: none;
+  color: #333;
+  padding: 8px 4px;
+  min-height: 40px;
+}
+
+.input-bar-field::placeholder {
+  color: #aaa;
+}
+
+.input-bar-icon-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.input-bar-icon-btn:active {
+  background: rgba(108, 92, 231, 0.08);
+  color: #6c5ce7;
+}
+
+.input-bar-send-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #6c5ce7;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.input-bar-send-btn:active {
+  background: #5a4bd1;
+}

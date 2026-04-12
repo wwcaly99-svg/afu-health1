@@ -1,0 +1,97 @@
+.header {
+  background: linear-gradient(145deg, #7c6cf0 0%, #a78bfa 50%, #c4b5fd 100%);
+  color: #fff;
+  padding: 14px 16px 12px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.header-dot {
+  font-size: 13px;
+  opacity: 0.5;
+  margin: 0 2px;
+}
+
+.header-subtitle {
+  font-size: 13px;
+  opacity: 0.75;
+  font-weight: 400;
+}
+
+.header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.header-entry-btn {
+  padding: 5px 11px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.header-entry-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.96);
+}
+
+.header-new-btn {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-new-btn:active {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0.92);
+}

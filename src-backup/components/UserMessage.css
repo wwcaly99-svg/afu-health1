@@ -1,0 +1,17 @@
+.msg-row-user {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 16px;
+  margin-bottom: 16px;
+}
+
+.msg-bubble-user {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: 16px 16px 6px 16px;
+  background: #6c5ce7;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.6;
+  word-break: break-word;
+}

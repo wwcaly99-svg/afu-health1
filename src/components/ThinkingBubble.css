@@ -1,0 +1,132 @@
+.think-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 2px 16px 4px;
+  gap: 8px;
+  animation: thinkFadeIn 0.25s ease;
+}
+
+.think-spacer {
+  width: 30px;
+  min-width: 30px;
+  flex-shrink: 0;
+}
+
+.think-card {
+  max-width: 76%;
+  border-radius: 12px;
+  background: #faf9fe;
+  border: 1px dashed #d4ccf9;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.think-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.think-header:active {
+  background: rgba(108, 92, 231, 0.04);
+}
+
+.think-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a78bfa;
+  animation: dotPulse 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.think-icon {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.think-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #7c6cf0;
+}
+
+.think-label-done {
+  font-size: 12px;
+  color: #999;
+  font-weight: 400;
+}
+
+.think-chevron {
+  font-size: 11px;
+  color: #b0adc0;
+  margin-left: auto;
+}
+
+.think-body {
+  padding: 0 12px 10px;
+  animation: bodySlide 0.2s ease;
+}
+
+.think-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.think-step {
+  font-size: 12px;
+  color: #6a6a78;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  animation: stepFade 0.2s ease;
+}
+
+.think-step-arrow {
+  color: #a78bfa;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.think-core {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid #ede9fe;
+}
+
+.think-core-label {
+  font-size: 10.5px;
+  color: #b0adc0;
+  margin-bottom: 2px;
+}
+
+.think-core-text {
+  font-size: 11.5px;
+  color: #999;
+  line-height: 1.5;
+}
+
+@keyframes thinkFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes bodySlide {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 300px; }
+}
+
+@keyframes stepFade {
+  from { opacity: 0; transform: translateX(-3px); }
+  to { opacity: 1; transform: translateX(0); }
+}

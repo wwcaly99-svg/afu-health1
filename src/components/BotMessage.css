@@ -1,0 +1,189 @@
+.bot-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 4px 12px;
+  margin-bottom: 6px;
+  gap: 8px;
+  animation: botFadeIn 0.3s ease;
+}
+
+.bot-avatar {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c6cf0, #a78bfa);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.bot-bubble {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 14px;
+  border-radius: 18px 18px 18px 6px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.bot-text {
+  color: #3a3a4a;
+  font-size: 14.5px;
+  line-height: 1.7;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.bot-thinking-status {
+  color: #b0adc0;
+  font-size: 13px;
+  animation: statusPulse 1.2s ease-in-out infinite;
+}
+
+/* ===== Thinking section inside bubble ===== */
+.bot-think {
+  margin-bottom: 0;
+}
+
+.bot-think-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  padding: 2px 0;
+}
+
+.bot-think-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a78bfa;
+  animation: dotPulse 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.bot-think-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.bot-think-label-active {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #7c6cf0;
+}
+
+.bot-think-label-done {
+  font-size: 12px;
+  color: #999;
+}
+
+.bot-think-chevron {
+  font-size: 11px;
+  color: #b0adc0;
+  margin-left: auto;
+}
+
+.bot-think-body {
+  padding: 4px 0 2px 13px;
+  animation: thinkBodyIn 0.2s ease;
+}
+
+.bot-think-step {
+  font-size: 12px;
+  color: #6a6a78;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 2px;
+  animation: stepSlide 0.2s ease;
+}
+
+.bot-think-arrow {
+  color: #a78bfa;
+  flex-shrink: 0;
+}
+
+.bot-think-core {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #f0ecfa;
+}
+
+.bot-think-core-label {
+  font-size: 10.5px;
+  color: #b0adc0;
+  margin-bottom: 1px;
+}
+
+.bot-think-core-text {
+  font-size: 11.5px;
+  color: #999;
+  line-height: 1.5;
+}
+
+/* ===== Divider ===== */
+.bot-divider {
+  height: 1px;
+  background: #f0ecfa;
+  margin: 8px 0;
+}
+
+/* ===== Feedback ===== */
+.bot-feedback {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.bot-fb {
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  opacity: 0.3;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bot-fb:hover { opacity: 0.55; }
+.bot-fb.active { opacity: 1; background: rgba(108, 92, 231, 0.08); }
+.bot-fb.dim { opacity: 0.12; cursor: default; }
+.bot-fb:disabled { cursor: default; }
+
+/* ===== Animations ===== */
+@keyframes botFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes thinkBodyIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes stepSlide {
+  from { opacity: 0; transform: translateX(-3px); }
+  to { opacity: 1; transform: translateX(0); }
+}

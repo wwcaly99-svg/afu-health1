@@ -1,0 +1,24 @@
+.msg-row-user {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 12px;
+  margin-bottom: 14px;
+  animation: msgFadeIn 0.25s ease;
+}
+
+.msg-bubble-user {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 18px 18px 6px 18px;
+  background: linear-gradient(135deg, #7c6cf0, #6c5ce7);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.65;
+  word-break: break-word;
+  box-shadow: 0 2px 8px rgba(108, 92, 231, 0.15);
+}
+
+@keyframes msgFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
