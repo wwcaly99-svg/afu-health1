@@ -25,7 +25,7 @@ function fallbackPlan(): PlanItem[] {
 }
 
 export async function executePlanGenerator(memory: SessionMemory): Promise<PlanItem[]> {
-  const prompt = `你是一个健康计划生成器。根据用户档案生成 2-4 条低门槛、可立即执行的短期计划。
+  const prompt = `你是一个健康计划生成器。根据用户档案生成 3 条低门槛、可立即执行的 3 天短期计划。
 
 用户档案：
 - 健康目标: ${JSON.stringify(memory.profile.health_goals)}
@@ -34,11 +34,14 @@ export async function executePlanGenerator(memory: SessionMemory): Promise<PlanI
 - 当前主题: ${memory.dialogue.current_topic}
 
 规则：
-1. 每条计划要具体到用户今天就能做
-2. 优先从饮食、活动、作息中选最容易的
-3. 考虑用户的约束条件（比如下班晚就不要安排晚间长时间运动）
-4. difficulty: easy=几乎不用额外努力, medium=需要一点意志力, hard=需要较大改变
-5. 2-4 条就够，不要太多
+1. 计划周期固定为 3 天，不要生成一周或两周的计划
+2. 任务数量固定 3 条，不要超过 4 条
+3. 每条任务一句话描述，简短清晰，不要长篇大论
+4. 每条任务开头加一个合适的 emoji（🍽️饮食 🚶运动 😴睡眠 💧饮水 📊监测，根据内容选）
+5. 优先从饮食、活动、作息中选最容易的
+6. 考虑用户的约束条件（比如下班晚就不要安排晚间长时间运动）
+7. difficulty: easy=几乎不用额外努力, medium=需要一点意志力, hard=需要较大改变
+8. 不要使用 markdown 格式，不要用 **加粗**、## 标题、--- 分隔线，只用 emoji 和文字
 
 请只输出 JSON 数组：
 [{"action":"具体动作","frequency":"每天/隔天/每周X次","difficulty":"easy|medium|hard"}]`;
@@ -57,7 +60,7 @@ export async function executePlanGenerator(memory: SessionMemory): Promise<PlanI
 
 export async function executePlanAdjuster(memory: SessionMemory): Promise<PlanItem[]> {
   const currentPlan = memory.action.current_plan || [];
-  const prompt = `你是一个健康计划调整器。用户觉得当前计划太难，需要调轻。
+  const prompt = `你是一个健康计划调整器。用户觉得当前计划太难，需要调轻为 3 天轻量版。
 
 当前计划：
 ${JSON.stringify(currentPlan)}
@@ -67,11 +70,14 @@ ${JSON.stringify(currentPlan)}
 - 健康指标: ${JSON.stringify(memory.profile.indicators)}
 
 规则：
-1. 保留最核心的 1-2 个动作，删掉最难的
-2. 把保留的动作调得更轻、更容易执行
-3. 考虑用户的约束条件
-4. 所有 difficulty 尽量是 easy
-5. 输出 2 条就够
+1. 计划周期固定为 3 天
+2. 输出 2 条任务，保留最核心的动作，删掉最难的
+3. 把保留的动作调得更轻、更容易执行
+4. 每条任务一句话描述，简短清晰，不要长篇大论
+5. 每条任务开头加一个合适的 emoji（🍽️饮食 🚶运动 😴睡眠 💧饮水 📊监测，根据内容选）
+6. 考虑用户的约束条件
+7. 所有 difficulty 尽量是 easy
+8. 不要使用 markdown 格式，不要用 **加粗**、## 标题、--- 分隔线，只用 emoji 和文字
 
 请只输出 JSON 数组：
 [{"action":"调整后的具体动作","frequency":"每天/隔天","difficulty":"easy|medium"}]`;
