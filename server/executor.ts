@@ -41,7 +41,7 @@ export async function executePlanGenerator(memory: SessionMemory): Promise<PlanI
 5. 优先从饮食、活动、作息中选最容易的
 6. 考虑用户的约束条件（比如下班晚就不要安排晚间长时间运动）
 7. difficulty: easy=几乎不用额外努力, medium=需要一点意志力, hard=需要较大改变
-8. 不要使用 markdown 格式，不要用 **加粗**、## 标题、--- 分隔线，只用 emoji 和文字
+8. 绝对不能使用 ** 加粗，不能使用任何 markdown 符号，每条任务只用 emoji + 纯文字，没有任何格式标记
 
 请只输出 JSON 数组：
 [{"action":"具体动作","frequency":"每天/隔天/每周X次","difficulty":"easy|medium|hard"}]`;
@@ -77,7 +77,7 @@ ${JSON.stringify(currentPlan)}
 5. 每条任务开头加一个合适的 emoji（🍽️饮食 🚶运动 😴睡眠 💧饮水 📊监测，根据内容选）
 6. 考虑用户的约束条件
 7. 所有 difficulty 尽量是 easy
-8. 不要使用 markdown 格式，不要用 **加粗**、## 标题、--- 分隔线，只用 emoji 和文字
+8. 绝对不能使用 ** 加粗，不能使用任何 markdown 符号，每条任务只用 emoji + 纯文字，没有任何格式标记
 
 请只输出 JSON 数组：
 [{"action":"调整后的具体动作","frequency":"每天/隔天","difficulty":"easy|medium"}]`;
