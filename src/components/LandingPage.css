@@ -1,0 +1,131 @@
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: #f7f5ff;
+}
+
+.landing-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 48px 20px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hero */
+.landing-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.landing-avatar {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #6c5ce7, #a78bfa);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(108, 92, 231, 0.28);
+}
+
+.landing-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2d2d3a;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.landing-subtitle {
+  font-size: 14px;
+  color: #888;
+  line-height: 1.75;
+  text-align: center;
+  max-width: 280px;
+}
+
+/* Cards */
+.landing-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.landing-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(108, 92, 231, 0.08);
+  text-align: left;
+  transition: all 0.14s ease;
+  width: 100%;
+}
+
+.landing-card:active {
+  background: #f3f0ff;
+  transform: scale(0.985);
+  box-shadow: 0 1px 4px rgba(108, 92, 231, 0.12);
+}
+
+.landing-card-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #6c5ce7, #a78bfa);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.landing-card-text {
+  flex: 1;
+  font-size: 14.5px;
+  color: #2d2d3a;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+.landing-card-arrow {
+  font-size: 15px;
+  color: #b0adc0;
+  flex-shrink: 0;
+}
+
+/* Refresh button */
+.landing-refresh {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #aaa;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  align-self: center;
+  transition: color 0.12s ease;
+}
+
+.landing-refresh:active {
+  color: #6c5ce7;
+}

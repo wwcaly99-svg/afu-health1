@@ -69,7 +69,7 @@ function mergeProfileWithMock(savedRecords) {
   };
 }
 
-export default function ChatPage() {
+export default function ChatPage({ initialMessage, onNewChat }) {
   const { sendMessage: sendToApi, resetSession, getSessionId } = useChat();
 
   const handleNewChat = () => {
@@ -82,20 +82,18 @@ export default function ChatPage() {
     sessionStorage.removeItem('afu-hintStates');
     sessionStorage.removeItem('afu-savedRecords');
     resetSession();
+    onNewChat?.();
   };
 
-  // Load messages from sessionStorage, or fall back to mock demo
+  // Start with empty messages (no mock initial data)
   const [messages, setMessages] = useState(() => {
+    // Don't restore from sessionStorage when coming from landing with a fresh message
+    if (initialMessage) return [];
     try {
       const saved = sessionStorage.getItem('afu-messages');
       if (saved) return JSON.parse(saved);
     } catch { /* ignore */ }
-    const initial = [];
-    mockConversations.slice(0, 3).forEach((conv) => {
-      initial.push({ type: 'user', text: conv.user });
-      initial.push({ type: 'bot', data: conv.bot, hintId: `hint-${hintIdCounter++}` });
-    });
-    return initial;
+    return [];
   });
 
   // Persist messages to sessionStorage on change
@@ -151,25 +149,7 @@ export default function ChatPage() {
   };
 
   // Track the latest plan from conversation
-  const [currentPlan, setCurrentPlan] = useState(() => {
-    const lastPlanConv = [...mockConversations.slice(0, 3)]
-      .reverse()
-      .find((c) => c.bot.card?.type === 'plan');
-    if (lastPlanConv) {
-      return {
-        title: lastPlanConv.bot.card.title,
-        description: lastPlanConv.bot.card.period_text,
-        duration: '',
-        items_preview: lastPlanConv.bot.card.items_preview,
-        tasks: lastPlanConv.bot.card.items_preview.map((text, i) => ({
-          id: `t${i}`,
-          text,
-          checked: false,
-        })),
-      };
-    }
-    return defaultPlanDetail;
-  });
+  const [currentPlan, setCurrentPlan] = useState(defaultPlanDetail);
 
   // Global checked state keyed by plan title
   const [checkedMap, setCheckedMap] = useState({});
@@ -196,11 +176,20 @@ export default function ChatPage() {
   const [drawerPlan, setDrawerPlan] = useState(null);
 
   const chatEndRef = useRef(null);
-  const mockIndex = useRef(3);
+  const mockIndex = useRef(0);
+  const initialSentRef = useRef(false);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    if (initialMessage && !initialSentRef.current) {
+      initialSentRef.current = true;
+      handleSend(initialMessage);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const openPlanDetail = (plan) => {
     setDrawerPlan(mergePlanWithMock(plan || currentPlan));
