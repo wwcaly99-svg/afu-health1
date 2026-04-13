@@ -7,6 +7,8 @@ export default function PlanDetailDrawer({
   checkedItems,
   onToggleTask,
   onClose,
+  onTooHard,
+  onAdjust,
 }) {
   if (!visible) return null;
 
@@ -96,8 +98,8 @@ export default function PlanDetailDrawer({
           </div>
 
           <div className="drawer-actions">
-            <button className="drawer-btn-warn">😮‍💨 这个太难了</button>
-            <button className="drawer-btn-adjust">🔄 调整计划</button>
+            <button className="drawer-btn-warn" onClick={() => { onClose(); onTooHard?.(); }}>😮‍💨 这个太难了</button>
+            <button className="drawer-btn-adjust" onClick={() => { onClose(); onAdjust?.(); }}>🔄 调整计划</button>
           </div>
         </div>
       </div>

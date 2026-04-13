@@ -1,21 +1,11 @@
 import React from 'react';
 import './InlinePlanCard.css';
 
-export default function InlinePlanCard({ card, currentPlan, onOpenPlan }) {
-  // Derive progress from currentPlan if it matches
-  let progressText = '';
-  let progressPercent = 0;
-  let total = card.items_preview?.length || 0;
-  let done = 0;
-
-  if (currentPlan && currentPlan.title === card.title && Array.isArray(currentPlan.tasks)) {
-    total = currentPlan.tasks.length;
-    done = currentPlan.tasks.filter((t) => t.completed || t.checked).length;
-    progressText = `已完成 ${done}/${total}`;
-    progressPercent = total > 0 ? (done / total) * 100 : 0;
-  } else if (total > 0) {
-    progressText = `今日进度 0/${total}`;
-  }
+export default function InlinePlanCard({ card, checkedItems, onOpenPlan }) {
+  const total = card.items_preview?.length || 0;
+  const done = checkedItems ? checkedItems.size : 0;
+  const progressText = total > 0 ? `已完成 ${done}/${total}` : '';
+  const progressPercent = total > 0 ? (done / total) * 100 : 0;
 
   return (
     <div className="inline-plan-card-row">

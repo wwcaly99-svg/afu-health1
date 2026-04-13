@@ -46,6 +46,7 @@ export default function ChatPage({ initialMessage, onNewChat }) {
     setCurrentPlan(defaultPlanDetail);
     setCheckedMap({});
     setSessionProfile({ indicators: {}, constraints: [], health_goals: [], current_topic: '', recent_replies: [] });
+    setSavedHintRecords([]);
     setHasActivePlan(false);
     sessionStorage.removeItem('afu-messages');
     sessionStorage.removeItem('afu-hintStates');
@@ -99,10 +100,17 @@ export default function ChatPage({ initialMessage, onNewChat }) {
     recent_replies: [],
   });
 
+  // Records explicitly saved by the user via profile hint cards
+  const [savedHintRecords, setSavedHintRecords] = useState([]);
+
   const getHintStatus = (hintId) => hintStates[hintId] || 'suggested';
 
-  const handleSaveHint = (hintId) => {
+  const handleSaveHint = (hintId, records) => {
     setHintStates((prev) => ({ ...prev, [hintId]: 'saved' }));
+    setSavedHintRecords((prev) => [
+      ...prev,
+      ...records.map((text) => ({ text, time: '刚刚' })),
+    ]);
   };
 
   const handleDismissHint = (hintId) => {
@@ -257,7 +265,6 @@ export default function ChatPage({ initialMessage, onNewChat }) {
         }
       },
       onError: () => {
-        setThinkingData(null);
         // Remove the streaming placeholder, will fall through to mock below
         setMessages((prev) => prev.filter((msg) => msg._streamId !== streamingMsgId));
       },
@@ -303,12 +310,13 @@ export default function ChatPage({ initialMessage, onNewChat }) {
     indicators: Object.entries(sessionProfile.indicators).map(([label, value]) => ({ label, value, date: '' })),
     habits: sessionProfile.constraints,
     goals: sessionProfile.health_goals,
-    recentRecords: sessionProfile.recent_replies.map((text) => ({ text, time: '刚刚' })),
+    recentRecords: savedHintRecords,
   };
   const hasSaved =
     Object.keys(sessionProfile.indicators).length > 0 ||
     sessionProfile.constraints.length > 0 ||
-    sessionProfile.health_goals.length > 0;
+    sessionProfile.health_goals.length > 0 ||
+    savedHintRecords.length > 0;
 
   return (
     <div className="chat-page">
@@ -352,7 +360,7 @@ export default function ChatPage({ initialMessage, onNewChat }) {
               {data.card?.type === 'plan' && (
                 <InlinePlanCard
                   card={data.card}
-                  currentPlan={currentPlan}
+                  checkedItems={getCheckedSet(data.card.title)}
                   onOpenPlan={() =>
                     openPlanDetail({
                       title: data.card.title,
@@ -371,7 +379,7 @@ export default function ChatPage({ initialMessage, onNewChat }) {
                 <InlineProfileHint
                   records={records}
                   status={getHintStatus(hintId)}
-                  onSave={() => handleSaveHint(hintId)}
+                  onSave={() => handleSaveHint(hintId, records)}
                   onDismiss={() => handleDismissHint(hintId)}
                   onOpenProfile={() => setShowProfileDrawer(true)}
                 />
@@ -391,6 +399,8 @@ export default function ChatPage({ initialMessage, onNewChat }) {
         checkedItems={drawerPlan ? getCheckedSet(drawerPlan.title) : new Set()}
         onToggleTask={(i) => drawerPlan && toggleCheck(drawerPlan.title, i)}
         onClose={() => setShowPlanDrawer(false)}
+        onTooHard={() => handleSend('这个计划太难了，帮我调整一下')}
+        onAdjust={() => handleSend('帮我调整一下计划')}
       />
 
       <ProfileDetailDrawer
