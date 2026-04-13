@@ -175,12 +175,26 @@ app.post('/api/chat', async (req, res) => {
     // 6. Apply state updates
     if (Object.keys(profileUpdates).length > 0) {
       const current = getSession(session_id).profile;
+
+      // Merge a list by replacing semantically-contained old entries with new ones
+      const mergeList = (existing: string[], incoming: string[]): string[] => {
+        if (!incoming || incoming.length === 0) return existing;
+        let result = [...existing];
+        for (const newItem of incoming) {
+          // Remove old entries that are substrings of (i.e. contained by) the new item
+          result = result.filter((old) => !newItem.includes(old));
+          // Only add if not already present
+          if (!result.includes(newItem)) result.push(newItem);
+        }
+        return result;
+      };
+
       updateSession(session_id, {
         profile: {
           ...current,
           indicators: { ...current.indicators, ...(profileUpdates.indicators as Record<string, string> || {}) },
-          constraints: [...new Set([...current.constraints, ...(profileUpdates.constraints as string[] || [])])],
-          health_goals: [...new Set([...current.health_goals, ...(profileUpdates.health_goals as string[] || [])])],
+          constraints: mergeList(current.constraints, profileUpdates.constraints as string[] || []),
+          health_goals: mergeList(current.health_goals, profileUpdates.health_goals as string[] || []),
         },
       });
     }
