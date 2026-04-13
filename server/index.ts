@@ -302,6 +302,16 @@ app.post('/api/chat', async (req, res) => {
         profile_hint: buildProfileHint(stateUpdates.profile || {}),
         conversation_id: session_id,
         quick_actions: ctrl.quick_actions || null,
+        profile_state: {
+          indicators: finalMemory.profile.indicators,
+          constraints: finalMemory.profile.constraints,
+          health_goals: finalMemory.profile.health_goals,
+          current_topic: finalMemory.dialogue.current_topic || '',
+          recent_replies: finalMemory.history
+            .filter((m) => m.role === 'assistant')
+            .slice(-6)
+            .map((m) => m.content.slice(0, 30)),
+        },
       },
     });
     res.end();

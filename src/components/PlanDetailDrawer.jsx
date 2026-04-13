@@ -2,12 +2,37 @@ import React from 'react';
 
 export default function PlanDetailDrawer({
   visible,
+  hasActivePlan,
   plan,
   checkedItems,
   onToggleTask,
   onClose,
 }) {
-  if (!visible || !plan) return null;
+  if (!visible) return null;
+
+  if (!hasActivePlan) {
+    return (
+      <div className="drawer-overlay" onClick={onClose}>
+        <div className="drawer" onClick={(e) => e.stopPropagation()}>
+          <div className="drawer-handle" />
+          <div className="drawer-content">
+            <div className="drawer-header">
+              <h2 className="drawer-title">行动计划</h2>
+              <button className="drawer-close" onClick={onClose}>✕</button>
+            </div>
+            <div className="profile-empty">
+              <div className="profile-empty-icon">📋</div>
+              <div className="profile-empty-title">还没有行动计划</div>
+              <div className="profile-empty-desc">
+                和阿福聊聊你的健康情况，<br />
+                我来帮你制定一个能开始的计划
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const total = plan.tasks ? plan.tasks.length : plan.items_preview?.length || 0;
   const done = plan.tasks

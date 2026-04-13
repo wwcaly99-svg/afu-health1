@@ -11,7 +11,6 @@ import { useChat } from '../hooks/useChat';
 import {
   mockConversations,
   defaultPlanDetail,
-  defaultProfile,
   mockResponses,
 } from '../data/mockData';
 
@@ -37,37 +36,6 @@ function mergePlanWithMock(plan) {
   };
 }
 
-/**
- * Merge saved records with defaultProfile mock.
- * Real saved data wins; missing sections fall back to mock defaults.
- */
-function mergeProfileWithMock(savedRecords) {
-  if (!savedRecords || savedRecords.length === 0) {
-    return { profile: defaultProfile, hasSaved: false };
-  }
-
-  const savedTexts = savedRecords.map((r) => r.text);
-
-  // Real saved records populate sections; mock fills gaps
-  const indicators = savedTexts.some((t) => t.includes('血糖'))
-    ? defaultProfile.indicators
-    : [];
-
-  const habits = savedTexts.filter((t) =>
-    defaultProfile.habits.some((h) => t.includes(h))
-  );
-
-  return {
-    profile: {
-      ...defaultProfile,
-      indicators: indicators.length > 0 ? indicators : defaultProfile.indicators,
-      habits: habits.length > 0 ? habits : defaultProfile.habits,
-      goals: defaultProfile.goals,
-      recentRecords: savedRecords,
-    },
-    hasSaved: true,
-  };
-}
 
 export default function ChatPage({ initialMessage, onNewChat }) {
   const { sendMessage: sendToApi, resetSession, getSessionId } = useChat();
@@ -75,12 +43,12 @@ export default function ChatPage({ initialMessage, onNewChat }) {
   const handleNewChat = () => {
     setMessages([]);
     setHintStates({});
-    setSavedRecords([]);
     setCurrentPlan(defaultPlanDetail);
     setCheckedMap({});
+    setSessionProfile({ indicators: {}, constraints: [], health_goals: [], current_topic: '', recent_replies: [] });
+    setHasActivePlan(false);
     sessionStorage.removeItem('afu-messages');
     sessionStorage.removeItem('afu-hintStates');
-    sessionStorage.removeItem('afu-savedRecords');
     resetSession();
     onNewChat?.();
   };
@@ -112,36 +80,29 @@ export default function ChatPage({ initialMessage, onNewChat }) {
     return {};
   });
 
-  // Saved records accumulated from user confirmations
-  const [savedRecords, setSavedRecords] = useState(() => {
-    try {
-      const saved = sessionStorage.getItem('afu-savedRecords');
-      if (saved) return JSON.parse(saved);
-    } catch { /* ignore */ }
-    return [];
-  });
-
-  // Persist hint states and saved records
+  // Persist hint states
   useEffect(() => {
     try {
       sessionStorage.setItem('afu-hintStates', JSON.stringify(hintStates));
     } catch { /* ignore */ }
   }, [hintStates]);
 
-  useEffect(() => {
-    try {
-      sessionStorage.setItem('afu-savedRecords', JSON.stringify(savedRecords));
-    } catch { /* ignore */ }
-  }, [savedRecords]);
+  // Whether a real plan exists on the server
+  const [hasActivePlan, setHasActivePlan] = useState(false);
+
+  // Session profile — updated from each API done event
+  const [sessionProfile, setSessionProfile] = useState({
+    indicators: {},
+    constraints: [],
+    health_goals: [],
+    current_topic: '',
+    recent_replies: [],
+  });
 
   const getHintStatus = (hintId) => hintStates[hintId] || 'suggested';
 
-  const handleSaveHint = (hintId, records) => {
+  const handleSaveHint = (hintId) => {
     setHintStates((prev) => ({ ...prev, [hintId]: 'saved' }));
-    setSavedRecords((prev) => [
-      ...prev,
-      ...records.map((r) => ({ text: r, time: '刚刚' })),
-    ]);
   };
 
   const handleDismissHint = (hintId) => {
@@ -255,6 +216,13 @@ export default function ChatPage({ initialMessage, onNewChat }) {
       },
       onDone: (finalResult) => {
         if (!finalResult) return;
+        // Update session profile and plan state from latest memory snapshot
+        if (finalResult.profile_state) {
+          setSessionProfile(finalResult.profile_state);
+        }
+        if (finalResult.meta) {
+          setHasActivePlan(!!finalResult.meta.has_active_plan);
+        }
         // Replace streaming placeholder with final structured data
         const response = {
           action_type: finalResult.action_type,
@@ -329,8 +297,18 @@ export default function ChatPage({ initialMessage, onNewChat }) {
     }, 600);
   };
 
-  // Build dynamic profile: real saved data first, mock fills gaps
-  const { profile: dynamicProfile, hasSaved } = mergeProfileWithMock(savedRecords);
+  // Build profile directly from session memory snapshot
+  const dynamicProfile = {
+    theme: sessionProfile.current_topic || '',
+    indicators: Object.entries(sessionProfile.indicators).map(([label, value]) => ({ label, value, date: '' })),
+    habits: sessionProfile.constraints,
+    goals: sessionProfile.health_goals,
+    recentRecords: sessionProfile.recent_replies.map((text) => ({ text, time: '刚刚' })),
+  };
+  const hasSaved =
+    Object.keys(sessionProfile.indicators).length > 0 ||
+    sessionProfile.constraints.length > 0 ||
+    sessionProfile.health_goals.length > 0;
 
   return (
     <div className="chat-page">
@@ -393,7 +371,7 @@ export default function ChatPage({ initialMessage, onNewChat }) {
                 <InlineProfileHint
                   records={records}
                   status={getHintStatus(hintId)}
-                  onSave={() => handleSaveHint(hintId, records)}
+                  onSave={() => handleSaveHint(hintId)}
                   onDismiss={() => handleDismissHint(hintId)}
                   onOpenProfile={() => setShowProfileDrawer(true)}
                 />
@@ -408,6 +386,7 @@ export default function ChatPage({ initialMessage, onNewChat }) {
 
       <PlanDetailDrawer
         visible={showPlanDrawer}
+        hasActivePlan={hasActivePlan}
         plan={drawerPlan}
         checkedItems={drawerPlan ? getCheckedSet(drawerPlan.title) : new Set()}
         onToggleTask={(i) => drawerPlan && toggleCheck(drawerPlan.title, i)}
