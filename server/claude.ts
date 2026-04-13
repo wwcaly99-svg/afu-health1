@@ -50,7 +50,7 @@ export async function callClaudeBlocking(
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 300,
+      max_tokens: 500,
       system: systemPrompt,
       messages: messages.map((m) => ({ role: m.role, content: m.content })),
     }),
