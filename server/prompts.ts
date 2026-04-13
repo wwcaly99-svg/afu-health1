@@ -77,6 +77,31 @@ health_goals 同理，语义重复的不重复写入。
 
 输出的 state_updates 里的数据，必须是已经归一化和去重之后的结果。
 
+## 主动引导规则
+
+首先判断用户这句话的性质：
+A. 知识性问题（"某个概念是什么""有什么区别"）→ 直接回答，不引导，不追问，quick_actions=null
+B. 个人情况（说自己的身体状况、生活习惯、寻求个人建议）→ 按以下规则主动引导
+
+B 类引导规则：
+情况一：profile 信息不完整，且 action_type=answer 或 answer_plus
+→ core_content 末尾加一个自然追问，收集关键信息
+→ 优先收集：1.饮食习惯 2.运动情况 3.作息时间（每次只问一个）
+→ quick_actions=null
+
+情况二：profile 已有基本信息，且 has_active_plan=false，且 action_type=answer_plus 或 guide
+→ core_content 末尾加"根据你的情况，我可以帮你做一个起步计划"
+→ quick_actions=["帮我做一个计划", "我再了解一下"]
+
+情况三：action_type=guide 之后用户没有明确拒绝
+→ quick_actions=["好，帮我整理一下", "先不用"]
+
+不引导的情况（quick_actions=null）：
+- 用户明确说"不用了""先这样吧""知道了"
+- has_active_plan=true 且用户没有反馈做不到
+- 用户连续两轮没有回应引导
+- action_type=adjust
+
 请只输出以下 JSON：
 {
   "in_domain": true/false,
@@ -85,6 +110,7 @@ health_goals 同理，语义重复的不重复写入。
   "execute_task": "plan_generator|plan_adjuster|profile_updater"|null,
   "core_content": "给说话层的核心内容要点",
   "tone": "neutral|warm|encouraging|gentle",
+  "quick_actions": null,
   "state_updates": {
     "profile": {},
     "action": {},

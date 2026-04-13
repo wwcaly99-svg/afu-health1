@@ -276,6 +276,7 @@ export default function ChatPage() {
           profile_preview: finalResult.profile_hint
             ? { records: finalResult.profile_hint.records }
             : { records: [] },
+          quick_actions: finalResult.quick_actions || null,
         };
         setMessages((prev) =>
           prev.map((msg) =>
@@ -358,6 +359,7 @@ export default function ChatPage() {
           const { data, hintId } = msg;
           const records = data.profile_preview?.records;
           const hasRecords = records && records.length > 0;
+          const isLastBotMsg = i === messages.length - 1 || messages.slice(i + 1).every((m) => m.type !== 'bot');
 
           return (
             <React.Fragment key={i}>
@@ -365,6 +367,8 @@ export default function ChatPage() {
                 text={data.reply_text || ''}
                 status={msg._status}
                 thinking={msg._thinking}
+                quickActions={isLastBotMsg ? (data.quick_actions || null) : null}
+                onQuickAction={(action) => handleSend(action)}
                 onFeedback={(rating) => {
                   fetch('/api/feedback', {
                     method: 'POST',

@@ -119,6 +119,7 @@ app.post('/api/chat', async (req, res) => {
       controllerRaw = JSON.stringify({
         in_domain: true, action_type: 'answer', reply_mode: 'direct',
         execute_task: null, core_content: message, tone: 'warm',
+        quick_actions: null,
         state_updates: { profile: {}, action: {}, dialogue: {} },
       });
     }
@@ -136,6 +137,7 @@ app.post('/api/chat', async (req, res) => {
       ctrl = {
         in_domain: true, action_type: 'answer', reply_mode: 'direct',
         execute_task: null, core_content: controllerRaw, tone: 'warm',
+        quick_actions: null,
         state_updates: { profile: {}, action: {}, dialogue: {} },
       };
     }
@@ -285,6 +287,7 @@ app.post('/api/chat', async (req, res) => {
         plan_preview: buildPlanPreview(planItems, ctrl.action_type as ActionType),
         profile_hint: buildProfileHint(stateUpdates.profile || {}),
         conversation_id: session_id,
+        quick_actions: ctrl.quick_actions || null,
       },
     });
     res.end();

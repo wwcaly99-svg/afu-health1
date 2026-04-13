@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './BotMessage.css';
 
-export default function BotMessage({ text, status, thinking, onFeedback }) {
+export default function BotMessage({ text, status, thinking, onFeedback, quickActions, onQuickAction }) {
   const [rating, setRating] = useState(null);
+  const [actionsUsed, setActionsUsed] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [visibleSteps, setVisibleSteps] = useState(0);
   const showThinking = !text && status && !thinking;
@@ -90,6 +91,22 @@ export default function BotMessage({ text, status, thinking, onFeedback }) {
         ) : hasText ? (
           <div className="bot-text">{text}</div>
         ) : null}
+
+        {/* Quick action buttons */}
+        {hasText && quickActions && quickActions.length > 0 && !actionsUsed && (
+          <div className="bot-quick-actions">
+            {quickActions.map((action, i) => (
+              <button
+                key={i}
+                className="bot-qa-btn"
+                onClick={() => {
+                  setActionsUsed(true);
+                  onQuickAction?.(action);
+                }}
+              >{action}</button>
+            ))}
+          </div>
+        )}
 
         {/* Feedback buttons */}
         {hasText && (

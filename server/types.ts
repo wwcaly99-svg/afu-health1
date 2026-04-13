@@ -26,6 +26,7 @@ export interface ChatResponse {
   plan_preview: PlanPreview | null;
   profile_hint: ProfileHint | null;
   conversation_id: string;
+  quick_actions: string[] | null;
 }
 
 export interface ChatRequest {
@@ -77,6 +78,7 @@ export interface ControllerOutput {
   execute_task: 'plan_generator' | 'plan_adjuster' | 'profile_updater' | null;
   core_content: string;
   tone: 'neutral' | 'warm' | 'encouraging' | 'gentle';
+  quick_actions: string[] | null;
   state_updates: {
     profile: Partial<ProfileState>;
     action: Partial<ActionState>;

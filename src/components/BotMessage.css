@@ -187,3 +187,29 @@
   from { opacity: 0; transform: translateX(-3px); }
   to { opacity: 1; transform: translateX(0); }
 }
+
+/* ===== Quick Actions ===== */
+.bot-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.bot-qa-btn {
+  padding: 6px 14px;
+  border: 1.5px solid #d4ccf9;
+  border-radius: 16px;
+  background: transparent;
+  color: #6c5ce7;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bot-qa-btn:active {
+  background: #f3f0ff;
+  transform: scale(0.96);
+}
