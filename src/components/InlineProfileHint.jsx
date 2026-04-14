@@ -55,6 +55,8 @@ export default function InlineProfileHint({ records, status, onSave, onDismiss, 
           ))}
         </div>
 
+        <div className="ph-ask-tip">阿福会结合【档案】提供个性化建议</div>
+
         <div className="ph-ask-foot">
           <span className="ph-ask-hint">🔒 仅自己可见</span>
           <div className="ph-ask-btns">
